@@ -127,14 +127,7 @@ angular.module('starter.controllers', [])
 
   document.addEventListener("deviceready", function () {
 
-    // $scope.here;
-    // $scope.there;
-    // $scope.bearing;
-    // $scope.rotation;
-    // $scope.distance;
-    // $scope.heading;
-    // $scope.compass;
-
+    var here, there, heading, bearing;
 
     // see http://ngcordova.com/docs/plugins/geolocation
     var locationOptions = {
@@ -152,29 +145,29 @@ angular.module('starter.controllers', [])
       },
       function(position) {
         console.log('function called');
-        $scope.here = turf.point([position.coords.latitude, position.coords.longitude]);
-        $scope.there = turf.point([$rootScope.markerPosition["J"], $rootScope.markerPosition["M"]]);
-        $scope.bearing = Math.floor(turf.bearing($scope.here, $scope.there) - $scope.heading + 90);
-        $scope.rotation = '-webkit-transform: rotate('+ $scope.bearing +'deg);transform: rotate('+ $scope.bearing +'deg);';
-        $scope.distance = Number(turf.distance($scope.here, $scope.there, 'miles')).toFixed(2);
+        here = turf.point([position.coords.latitude, position.coords.longitude]);
+        there = turf.point([$rootScope.markerPosition["J"], $rootScope.markerPosition["M"]]);
+        // $scope.bearing = Math.floor(turf.bearing(here, there) - $scope.heading + 90);
+        // $scope.rotation = '-webkit-transform: rotate('+ $scope.bearing +'deg);transform: rotate('+ $scope.bearing +'deg);';
+        $scope.distance = Number(turf.distance(here, there, 'miles')).toFixed(2);
     });
 
 
 
     // see http://ngcordova.com/docs/plugins/deviceOrientation
-    var orientationOptions = { frequency: 100 };   // how often the watch updates
+    var orientationOptions = { frequency: 250 };   // how often the watch updates
 
     $scope.watch = $cordovaDeviceOrientation.watchHeading(orientationOptions).then(
       null,
       function(error) {
-        $scope.heading = err;
+        //$scope.heading = err;
       },
       function(result) {
-        var heading = ionic.Platform.isIOS() ? result.magneticHeading : result.trueHeading;
+        heading = ionic.Platform.isIOS() ? result.magneticHeading : result.trueHeading;
         //$scope.compass = 'transform: rotate(-'+ heading +'deg)';
-        $scope.heading = heading;
-        $scope.bearing = Math.floor(turf.bearing($scope.here, $scope.there) - $scope.heading + 90);
-        $scope.rotation = '-webkit-transform: rotate('+ $scope.bearing +'deg);transform: rotate('+ $scope.bearing +'deg);';
+        //$scope.heading = heading;
+        bearing = Math.floor(turf.bearing(here, there) - heading + 90);
+        $scope.rotation = '-webkit-transform: rotate('+ bearing +'deg);transform: rotate('+ bearing +'deg);';
         //  try result.magneticHeading?
       });
 
