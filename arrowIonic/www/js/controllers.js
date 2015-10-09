@@ -144,12 +144,11 @@ angular.module('starter.controllers', [])
         console.log(err);
       },
       function(position) {
-        console.log('function called');
         here = turf.point([position.coords.latitude, position.coords.longitude]);
         there = turf.point([$rootScope.markerPosition["J"], $rootScope.markerPosition["M"]]);
         // $scope.bearing = Math.floor(turf.bearing(here, there) - $scope.heading + 90);
         // $scope.rotation = '-webkit-transform: rotate('+ $scope.bearing +'deg);transform: rotate('+ $scope.bearing +'deg);';
-        $scope.distance = Number(turf.distance(here, there, 'miles')).toFixed(2);
+        $scope.distance = Number(turf.distance(here, there, 'miles')).toFixed(6);
     });
 
 
