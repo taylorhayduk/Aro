@@ -59,13 +59,17 @@ io.on('connection', function(socket){
 
     var gameType = lobby[gameID].gameType;
 
-    io.emit('gameStart', 'number of player in lobby: '+lobby[gameID].players.length);
-    io.emit('gameStart', 'gameType: ' +gameType);
-    io.emit('gameStart', 'max in game: ' +gameSettings[gameType].max);
+    // io.emit('gameStart', 'number of player in lobby: '+lobby[gameID].players.length);
+    // io.emit('gameStart', 'gameType: ' +gameType);
+    // io.emit('gameStart', 'max in game: ' +gameSettings[gameType].max);
     if (lobby[gameID].players.length === gameSettings[gameType].max) {
       io.emit('gameStart', 'we are at max capacity!!');
-    //   liveGames[gameID] = new player.gameType(games[gameID]);
-    //   delete lobby[gameID];
+      liveGames[gameID] = new player.gameType(games[gameID]);
+      delete lobby[gameID];
+      io.emit('gameStart', 'lobby: ');
+      io.emit('gameStart', lobby);
+      io.emit('gameStart', 'liveGames:');
+      io.emit('gameStart', liveGames);
     }
   });
 
