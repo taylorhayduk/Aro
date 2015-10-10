@@ -57,7 +57,7 @@ io.on('connection', function(socket){
     }
     lobby[gameID].players.push(player);
 
-    var gameType = lobby[gameID][gameType];
+    var gameType = lobby[gameID];
 
     io.emit('gameStart', 'number of player in lobby: '+lobby[gameID].players.length);
     io.emit('gameStart', 'gameType: ' +gameType);
