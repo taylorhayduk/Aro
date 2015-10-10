@@ -121,9 +121,16 @@ angular.module('starter.controllers', [])
   //});
 
 
-.controller('CompassCtrl', function($rootScope, $scope, $state, $cordovaDeviceOrientation, $cordovaGeolocation, $ionicScrollDelegate) {
+.controller('CompassCtrl', function($rootScope, $scope, $state, $cordovaDeviceOrientation, $cordovaGeolocation, $ionicScrollDelegate, socket) {
 
+  // This was used to test the socket
+  // socket.on('chat message', function(message) {
+  //   console.log('successfully received chat message');
+  //   console.log(message);
+  //   $scope.receivedmessage = message;
+  // });
 
+  // socket.emit('chat message', 'This is the emitted message from client');
 
   document.addEventListener("deviceready", function () {
 
@@ -167,9 +174,75 @@ angular.module('starter.controllers', [])
         //$scope.heading = heading;
         bearing = Math.floor(turf.bearing(here, there) - heading + 90);
         $scope.rotation = '-webkit-transform: rotate('+ bearing +'deg);transform: rotate('+ bearing +'deg);';
-        //  try result.magneticHeading?
       });
 
     }, false);
+
+})
+
+
+.controller('HomeCtrl', function($rootScope, $scope, socket, options) {
+
+  var codeOptions = options.codeOptions;
+  var chars = codeOptions.chars;
+
+  $scope.gameTypes = options.gameTypes;
+  $scope.publicGames = [];
+  $scope.createdGame = {};
+  $scope.game = {};
+  $scope.now = new Date();
+  setTimeout(function() { $scope.now = new Date(); }, 1000);
+
+  $scope.selectCreate = function() {
+    $scope.selectedJoin = false;
+    $scope.selectedCreate = true;
+  };
+
+  $scope.selectJoin = function() {
+    $scope.selectedCreate = false;
+    $scope.selectedJoin = true;
+  };
+
+  var attempts = 0;
+  var sendNewGametoServer = function(private) {
+    var code = '';
+    for (var j = 0; j < codeOptions[private?'privateLen':'publicLen']; j++) {
+      code += chars[Math.floor(Math.random()*chars.length)];
+    }
+    // do post request
+      /* success: function() {
+        attempts = 0;
+        $scope.joinGame(code);
+      };
+      error: function() {
+        if (attempts > 3) {
+          console.log('error')
+        } else {
+          attempts++;
+          sendNewGametoServer(private);
+        }
+      }; */
+  };
+
+  $scope.createGame = function() {
+    sendNewGametoServer($scope.createdGame.isPrivate);
+  };
+
+  $scope.joinGame = function(gameID) {
+    // trigger a joinGame to server
+      // if receive error from server
+      // because no current available game
+      // has that gameID, then:
+        // $scope.game.notExist = true;
+      // if receive success, change back to false
+  };
+
+  socket.on('gameEnter', function() {
+    // show waiting screen
+  });
+
+  socket.on('game start', function() {
+
+  });
 
 });

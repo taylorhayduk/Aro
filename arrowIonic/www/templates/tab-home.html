@@ -1,0 +1,53 @@
+<ion-view view-title="Home">
+    <ion-content>
+      <div>
+        <input ng-hide="selectedCreate" class="home-button" type="submit" value="Create a new game" on-tap="selectCreate()"/>
+        <input ng-hide="selectedJoin" class="home-button" type="submit" value="Join an existing game" on-tap="selectJoin()"/>
+      </div>
+
+      <div ng-if="selectedCreate">
+
+        <div>Select whether the game will be public or private</div>
+        <select ng-init="false" ng-model="createdGame.isPrivate">
+          <option value="false" selected>Public</option>
+          <option value="true">Private</option>
+        </select>
+        <!-- Maybe add option later to specify max distance between players -->
+        <div>Select game</div>
+        <select ng-init="0" ng-model="createdGame.gameTypeInd">
+          <option ng-repeat="gameType in gameTypes" value="{{$index}}" ng-selected="$first">{{ gametype.name }}</option>
+        </select>
+
+        <div><a>Click here to see the rules for the selected game</a></div>
+        <div>Select minimum number of players</div>
+        <input type="number" ng-model="createdGame.minPlayers" ng-init="gametype.minPlayers"  min="{{ gametype.minPlayers }}" max="{{ createdGame.maxPlayers }}" ng-disabled="gametype.minPlayers = gametype.maxPlayers">
+
+        <div>Select maximum number of players. Game will immediately begin when maximum number of players have joined.</div>
+        <input type="number" ng-model="createdGame.maxPlayers" ng-init="gametype.maxPlayers"  min="{{ createdGame.minPlayers }}" max="{{ gametype.maxPlayers }}" ng-disabled="gametype.minPlayers = gametype.maxPlayers">
+
+        <div>Select maximum time to wait for players to join. Game will abort if minimum number of players have not joined</div>
+        <input type="number" ng-init="5" min="1" ng-model="createdGame.maxWait">
+        <input type="submit" value="Create game!" ng-click="createGame()">
+      </div>
+
+      <div ng-if="selectedJoin">
+
+        <div>To join a private game, enter the game code:</div>
+        <input type="text" ng-init="''" ng-model="game.code">
+        <input type="submit" value="Join game!" ng-click="joinGame(game.code)">
+        <div ng-if="game.notExist">The code you entered does not match a currently available game. Please enter another code, or join a public game, or create a new game.</div>
+        <div>Or select an available public game:</div>
+        <div>
+          <div ng-hide="publicGames.length">There are currently no public games available to join. Please create a new game or join a private game.</div>
+          <div ng-repeat="publicGame in publicGames">
+            <div>Game type: {{ publicGame.type }}</div>
+            <div>Spots available: {{ publicGame.maxPlayers - publicGame.players.length }}</div>
+            <div>Additional players needed: {{ publicGame.players.length - publicGame.minPlayers }}</div>
+            <div>Time remaining to join: {{ Math.round(publicGame.startTime - now )}}</div>
+            <input type="submit" value="Join this game!" ng-click="joinGame(publicGame.gameID)">
+          </div>
+        </div>
+      </div>
+
+    </ion-content>
+</ion-view>
