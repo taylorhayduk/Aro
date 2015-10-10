@@ -62,6 +62,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'btford.
         controller: 'CompassCtrl'
       }
     }
+  })
+
+  .state('tab.home', {
+    url: '/home',
+    views: {
+      'tab-home': {
+        templateUrl: 'templates/tab-home.html',
+        controller: 'HomeCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback
@@ -76,4 +86,27 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'btford.
   return socketFactory({
     ioSocket: myIoSocket
   });
+})
+
+.factory('options', function() {
+  // will do a get request for the game types, since game types
+  // will be in server. Fon now just hard-coded
+  var gameTypes = [
+    {
+      name: 'Switch!',
+      minPlayers: 2,
+      maxPlayers: 2
+    }
+  ];
+
+  var codeOptions = {
+    chars: "ABCDEFGHJKLMNPQRSTUVWXYZ23456789",
+    publicLen: 4,
+    privateLen: 3,
+  }
+
+  return {
+    codeOptions: codeOptions,
+    gameTypes: gameTypes,
+  };
 });
