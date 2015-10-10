@@ -11,46 +11,29 @@ var port = process.env.PORT || 3000;
 //         console.log('connection successful');
 //     }
 // });
-// var lobby = {};
-// var liveGames = {};
-
-// var SwappingGame = function (players) {
-//   var gameID = players[0].gameID;
-//   //subscribe to new socket (should be on client side)
-//   // io.on('connection', function(socket){
-//   //   socket.join(gameID);
-//   // });
-
-//   io.to(gameID).emit('newTarget', [players[0].playerId, players[1]]);
-//   io.to(gameID).emit('newTarget', [players[1].playerId, players[0]]);
-
-//   console.log('SwappingGame is running!!!');
-
-//   //listen for target acquired to end game
-//   //io.on('targetAcquired')  
-//     //end game
-// };
-
-// var gameSettings = {
-//   SwappingGame: {min: 2, max: 2}
-// };
-var games = {};
+var lobby = {};
+var liveGames = {};
 
 var SwappingGame = function (players) {
   var gameID = players[0].gameID;
   //subscribe to new socket (should be on client side)
-  io.on('connection', function(socket){
-    socket.join(gameID);
-  });
+  // io.on('connection', function(socket){
+  //   socket.join(gameID);
+  // });
 
-  io.to(gameID).emit([players[0].playerId, players[1].location]);
-  io.to(gameID).emit([players[1].playerId, players[0].location]);
+  io.to(gameID).emit('newTarget', [players[0].playerId, players[1]]);
+  io.to(gameID).emit('newTarget', [players[1].playerId, players[0]]);
+
+  console.log('SwappingGame is running!!!');
 
   //listen for target acquired to end game
   //io.on('targetAcquired')  
     //end game
 };
 
+var gameSettings = {
+  SwappingGame: {min: 2, max: 2}
+};
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -67,11 +50,11 @@ io.on('connection', function(socket){
 
   socket.on('gameEnter', function(player) {
     var gameID = player.gameID;
-    // if (player[newGame]) {
-    //   lobby[gameID] = {players: [], gameType: player.newGame.gameType};
-    // }
+    if (player[newGame]) {
+      lobby[gameID] = {players: [], gameType: player.newGame.gameType};
+      io.emit('gameStart', 'we created a game in the lobby');
+    }
     // lobby.gameID.players.push(player);
-    // console.log(lobby);
     io.emit('gameStart', gameID);  // DELETE: this is for testing purposes
     // if (lobby[gameID].length === gameSettings[player.gameType].max) {
     //   io.emit('gameStart', gameID);
