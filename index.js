@@ -34,6 +34,23 @@ var port = process.env.PORT || 3000;
 // var gameSettings = {
 //   SwappingGame: {min: 2, max: 2}
 // };
+var games = {};
+
+var SwappingGame = function (players) {
+  var gameID = players[0].gameID;
+  //subscribe to new socket (should be on client side)
+  io.on('connection', function(socket){
+    socket.join(gameID);
+  });
+
+  io.to(gameID).emit([players[0].playerId, players[1].location]);
+  io.to(gameID).emit([players[1].playerId, players[0].location]);
+
+  //listen for target acquired to end game
+  //io.on('targetAcquired')  
+    //end game
+}
+
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -46,6 +63,7 @@ io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', 'this is from the server. Joyce, Rod, Tisha, and Taylor are awesome!!');
   });
+
 
   socket.on('gameEnter', function(player) {
     var gameID = player.gameID;
@@ -60,10 +78,25 @@ io.on('connection', function(socket){
       delete lobby[gameID];
     }
   });
+
+  socket.on('gameEnter', function(playerObj) {
+    games[playerObj.gameID] = games[playerObj.gameID] || [];
+    games[playerObj.gameID].push(playerObj);
+    if (games[gameID].length >= 2) {
+      io.emit('game start', gameID);
+      //create new Game
+      // var gameID = new SwappingGame(games[gameID])
+
+    }
+  }
+
 });
 
 http.listen(port, function(){
   console.log('listening on *:'+port);
+
 });
 
 console.log('hello')
+
+});
