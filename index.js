@@ -49,7 +49,7 @@ var SwappingGame = function (players) {
   //listen for target acquired to end game
   //io.on('targetAcquired')  
     //end game
-}
+};
 
 
 io.on('connection', function(socket){
@@ -65,30 +65,21 @@ io.on('connection', function(socket){
   });
 
 
-  // socket.on('gameEnter', function(player) {
-  //   var gameID = player.gameID;
-  //   if (player[newGame]) {
-  //     lobby[gameID] = {players: [], gameType: player.newGame.gameType};
-  //   }
-  //   lobby.gameID.players.push(player);
-  //   console.log(lobby);
-  //   if (lobby[gameID].length === gameSettings[player.gameType].max) {
-  //     io.emit('gameStart', gameID);
-  //     liveGames[gameID] = new player.gameType(games[gameID]);
-  //     delete lobby[gameID];
-  //   }
-  // });
+  socket.on('gameEnter', function(player) {
+    var gameID = player.gameID;
+    if (player[newGame]) {
+      lobby[gameID] = {players: [], gameType: player.newGame.gameType};
+    }
+    lobby.gameID.players.push(player);
+    console.log(lobby);
+    if (lobby[gameID].length === gameSettings[player.gameType].max) {
+      io.emit('gameStart', gameID);
+      liveGames[gameID] = new player.gameType(games[gameID]);
+      delete lobby[gameID];
+    }
+  });
 
-  // socket.on('gameEnter', function(playerObj) {
-  //   games[playerObj.gameID] = games[playerObj.gameID] || [];
-  //   games[playerObj.gameID].push(playerObj);
-  //   if (games[gameID].length >= 2) {
-  //     io.emit('game start', gameID);
-  //     //create new Game
-  //     // var gameID = new SwappingGame(games[gameID])
 
-  //   }
-  // }
 
 });
 
