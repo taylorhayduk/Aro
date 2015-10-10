@@ -71,3 +71,4 @@ http.listen(port, function(){
   console.log('listening on *:'+port);
 });
 
+console.log('hello')
