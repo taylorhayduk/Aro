@@ -47,19 +47,19 @@ io.on('connection', function(socket){
     io.emit('chat message', 'this is from the server. Joyce, Rod, Tisha, and Taylor are awesome!!');
   });
 
-  // socket.on('gameEnter', function(player) {
-  //   var gameID = player.gameID;
-  //   if (player[newGame]) {
-  //     lobby[gameID] = {players: [], gameType: player.newGame.gameType};
-  //   }
-  //   lobby.gameID.players.push(player);
-  //   console.log(lobby);
-  //   if (lobby[gameID].length === gameSettings[player.gameType].max) {
-  //     io.emit('gameStart', gameID);
-  //     liveGames[gameID] = new player.gameType(games[gameID]);
-  //     delete lobby[gameID];
-  //   }
-  // });
+  socket.on('gameEnter', function(player) {
+    var gameID = player.gameID;
+    if (player[newGame]) {
+      lobby[gameID] = {players: [], gameType: player.newGame.gameType};
+    }
+    lobby.gameID.players.push(player);
+    console.log(lobby);
+    if (lobby[gameID].length === gameSettings[player.gameType].max) {
+      io.emit('gameStart', gameID);
+      liveGames[gameID] = new player.gameType(games[gameID]);
+      delete lobby[gameID];
+    }
+  });
 });
 
 http.listen(port, function(){
