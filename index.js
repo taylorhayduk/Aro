@@ -57,9 +57,9 @@ io.on('connection', function(socket){
     }
     lobby[gameID].players.push(player);
 
-    var gameType = lobby[gameID];
+    // var gameType = lobby[gameID].players[0];
 
-    io.emit('gameStart', 'number of player in lobby: '+lobby[gameID].players.length);
+    io.emit('gameStart', 'number of player in lobby: '+lobby);
     io.emit('gameStart', 'gameType: ' +gameType);
     io.emit('gameStart', 'max in game: ' +gameSettings[gameType].max);
     if (lobby[gameID].players.length === gameSettings[gameType].max) {
