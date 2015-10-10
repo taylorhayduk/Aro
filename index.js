@@ -66,18 +66,18 @@ io.on('connection', function(socket){
 
 
   socket.on('gameEnter', function(player) {
-    var gameID = player.gameID;
-    if (player[newGame]) {
-      lobby[gameID] = {players: [], gameType: player.newGame.gameType};
-    }
-    lobby.gameID.players.push(player);
-    console.log(lobby);
+    // var gameID = player.gameID;
+    // if (player[newGame]) {
+    //   lobby[gameID] = {players: [], gameType: player.newGame.gameType};
+    // }
+    // lobby.gameID.players.push(player);
+    // console.log(lobby);
     io.emit('gameStart', 'gameEnter worked');  // DELETE: this is for testing purposes
-    if (lobby[gameID].length === gameSettings[player.gameType].max) {
-      io.emit('gameStart', gameID);
-      liveGames[gameID] = new player.gameType(games[gameID]);
-      delete lobby[gameID];
-    }
+    // if (lobby[gameID].length === gameSettings[player.gameType].max) {
+    //   io.emit('gameStart', gameID);
+    //   liveGames[gameID] = new player.gameType(games[gameID]);
+    //   delete lobby[gameID];
+    // }
   });
 
 
