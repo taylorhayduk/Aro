@@ -72,7 +72,7 @@ io.on('connection', function(socket){
     }
     lobby.gameID.players.push(player);
     console.log(lobby);
-    io.emit('gameStart', gameID);  // DELETE: this is for testing purposes
+    io.emit('gameStart', 'gameEnter worked');  // DELETE: this is for testing purposes
     if (lobby[gameID].length === gameSettings[player.gameType].max) {
       io.emit('gameStart', gameID);
       liveGames[gameID] = new player.gameType(games[gameID]);
