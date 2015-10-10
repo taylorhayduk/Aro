@@ -56,7 +56,7 @@ io.on('connection', function(socket){
       lobby[gameID] = {players: [], gameType: player.newGame.gameType};
     }
     lobby[gameID].players.push(player);
-    if (lobby[gameID].length === gameSettings[player.gameType].max) {
+    if (lobby[gameID].length === gameSettings[player.newGame.gameType].max) {
       io.emit('gameStart', gameID);
       liveGames[gameID] = new player.gameType(games[gameID]);
       delete lobby[gameID];
