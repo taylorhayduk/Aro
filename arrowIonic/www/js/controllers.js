@@ -288,6 +288,7 @@ angular.module('starter.controllers', [])
     // here, must communicate to server so server can take that
     // player out from the players list for that game
     // (and can notify a player if they are the only one remaining)
+
   };
 
 });
