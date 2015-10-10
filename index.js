@@ -56,10 +56,13 @@ io.on('connection', function(socket){
       lobby[gameID] = {players: [], gameType: player.newGame.gameType};
     }
     lobby[gameID].players.push(player);
+
+    var gameType = lobby[gameID][gameType];
+
     io.emit('gameStart', 'number of player in lobby: '+lobby[gameID].players.length);
-    io.emit('gameStart', 'max in game: ' +gameSettings[player.newGame.gameType].max);
-    if (lobby[gameID].players.length === gameSettings[player.newGame.gameType].max) {
-      io.emit('gameStart', 'holy shit, we are at max capacity!!');
+    io.emit('gameStart', 'max in game: ' +gameSettings[gameType].max);
+    if (lobby[gameID].players.length === gameSettings[gameType].max) {
+      io.emit('gameStart', 'we are at max capacity!!');
     //   liveGames[gameID] = new player.gameType(games[gameID]);
     //   delete lobby[gameID];
     }
