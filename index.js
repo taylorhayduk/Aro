@@ -22,7 +22,7 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
   });
   socket.on('chat message', function(msg){
-    io.emit('chat message', 'this is from the server. taylor is awesome');
+    io.emit('chat message', 'this is from the server. Joyce, Rod, Tisha, and Joyce are awesome!!');
   });
 });
 
