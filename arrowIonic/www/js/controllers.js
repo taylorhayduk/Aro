@@ -121,9 +121,16 @@ angular.module('starter.controllers', [])
   //});
 
 
-.controller('CompassCtrl', function($rootScope, $scope, $state, $cordovaDeviceOrientation, $cordovaGeolocation, $ionicScrollDelegate) {
+.controller('CompassCtrl', function($rootScope, $scope, $state, $cordovaDeviceOrientation, $cordovaGeolocation, $ionicScrollDelegate, socket) {
 
+  // This was used to test the socket
+  // socket.on('chat message', function(message) {
+  //   console.log('successfully received chat message');
+  //   console.log(message);
+  //   $scope.receivedmessage = message;
+  // });
 
+  // socket.emit('chat message', 'This is the emitted message from client');
 
   document.addEventListener("deviceready", function () {
 

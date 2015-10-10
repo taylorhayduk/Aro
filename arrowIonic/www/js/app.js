@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'btford.socket-io'])
 
 .config(function($ionicConfigProvider) {
   $ionicConfigProvider.tabs.position('bottom');
@@ -67,4 +67,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/map');
 
+})
+
+.factory('socket', function(socketFactory) {
+  // Create socket, connect to url (must change url here)
+  var myIoSocket = io.connect('https://arogames.herokuapp.com/');
+
+  return socketFactory({
+    ioSocket: myIoSocket
+  });
 });
