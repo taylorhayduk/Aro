@@ -11,29 +11,29 @@ var port = process.env.PORT || 3000;
 //         console.log('connection successful');
 //     }
 // });
-var lobby = {};
-var liveGames = {};
+// var lobby = {};
+// var liveGames = {};
 
-var SwappingGame = function (players) {
-  var gameID = players[0].gameID;
-  //subscribe to new socket (should be on client side)
-  // io.on('connection', function(socket){
-  //   socket.join(gameID);
-  // });
+// var SwappingGame = function (players) {
+//   var gameID = players[0].gameID;
+//   //subscribe to new socket (should be on client side)
+//   // io.on('connection', function(socket){
+//   //   socket.join(gameID);
+//   // });
 
-  io.to(gameID).emit('newTarget', [players[0].playerId, players[1]]);
-  io.to(gameID).emit('newTarget', [players[1].playerId, players[0]]);
+//   io.to(gameID).emit('newTarget', [players[0].playerId, players[1]]);
+//   io.to(gameID).emit('newTarget', [players[1].playerId, players[0]]);
 
-  console.log('SwappingGame is running!!!');
+//   console.log('SwappingGame is running!!!');
 
-  //listen for target acquired to end game
-  //io.on('targetAcquired')  
-    //end game
-};
+//   //listen for target acquired to end game
+//   //io.on('targetAcquired')  
+//     //end game
+// };
 
-var gameSettings = {
-  SwappingGame: {min: 2, max: 2}
-};
+// var gameSettings = {
+//   SwappingGame: {min: 2, max: 2}
+// };
 
 io.on('connection', function(socket){
   console.log('a user connected');
