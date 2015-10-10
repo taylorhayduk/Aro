@@ -11,22 +11,29 @@ var port = process.env.PORT || 3000;
 //         console.log('connection successful');
 //     }
 // });
-var games = {};
+var lobby = {};
+var liveGames = {};
 
 var SwappingGame = function (players) {
   var gameID = players[0].gameID;
   //subscribe to new socket (should be on client side)
-  io.on('connection', function(socket){
-    socket.join(gameID);
-  });
+  // io.on('connection', function(socket){
+  //   socket.join(gameID);
+  // });
 
-  io.to(gameID).emit([players[0].playerId, players[1].location]);
-  io.to(gameID).emit([players[1].playerId, players[0].location]);
+  io.to(gameID).emit('newTarget', [players[0].playerId, players[1]]);
+  io.to(gameID).emit('newTarget', [players[1].playerId, players[0]]);
+
+  console.log('SwappingGame is running!!!')
 
   //listen for target acquired to end game
   //io.on('targetAcquired')  
     //end game
-}
+};
+
+var gameSettings = {
+  SwappingGame: {min: 2, max: 2}
+};
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -40,16 +47,19 @@ io.on('connection', function(socket){
     io.emit('chat message', 'this is from the server. Joyce, Rod, Tisha, and Taylor are awesome!!');
   });
 
-  socket.on('gameEnter', function(playerObj) {
-    games[playerObj.gameID] = games[playerObj.gameID] || [];
-    games[playerObj.gameID].push(playerObj);
-    if (games[gameID].length >= 2) {
-      io.emit('game start', gameID);
-      //create new Game
-      // var gameID = new SwappingGame(games[gameID])
-
+  socket.on('gameEnter', function(player) {
+    var gameID = player.gameID;
+    if (player[newGame]) {
+      lobby[gameID] = {players: [], gameType: player.newGame.gameType};
     }
-  }
+    lobby.gameID.players.push(player);
+    console.log(lobby);
+    if (lobby[gameID].length === gameSettings[player.gameType].max) {
+      io.emit('gameStart', gameID);
+      liveGames[gameID] = new player.gameType(games[gameID]);
+      delete lobby[gameID];
+    }
+  });
 });
 
 http.listen(port, function(){
