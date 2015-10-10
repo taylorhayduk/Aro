@@ -55,7 +55,7 @@ io.on('connection', function(socket){
       io.emit('gameStart', 'making game...');
       lobby[gameID] = {players: [], gameType: player.newGame.gameType};
     }
-    // lobby.gameID.players.push(player);
+    lobby.gameID.players.push(player);
     io.emit('gameStart', lobby);  // DELETE: this is for testing purposes
     // if (lobby[gameID].length === gameSettings[player.gameType].max) {
     //   io.emit('gameStart', gameID);
