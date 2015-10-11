@@ -15,13 +15,15 @@ var lobby = {};
 var liveGames = {};
 
 var SwappingGame = function (players) {
+  var gameID = players[0].gameID;
+
   io.emit('gameStart', 'in SwappingGame function');
   io.on('connection', function(socket) {
     socket.on('bullshit', function(input){
-      io.emit('gameStart', 'heres some bullshit:' + input);
+      io.emit('gameStart', gameID);
+      io.emit('gameStart', lobby);
     })
   })
-  // var gameID = players[0].gameID;
   //subscribe to new socket (should be on client side)
   // io.on('connection', function(socket){
   //   socket.join(gameID);
