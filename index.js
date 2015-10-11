@@ -18,12 +18,14 @@ var SwappingGame = function (players) {
   var gameID = players[0].gameID;
 
   io.emit('gameStart', 'in SwappingGame function');
+
   io.on('connection', function(socket) {
-    socket.on('bullshit', function(input){
-      io.emit('gameStart', gameID);
-      io.emit('gameStart', lobby);
+    socket.join(gameID);
+
+    socket.on('def', function(input){
+      io.to(gameID).emit('in def server')
     })
-  })
+  });
   //subscribe to new socket (should be on client side)
   // io.on('connection', function(socket){
   //   socket.join(gameID);
@@ -52,8 +54,8 @@ io.on('connection', function(socket){
       io.emit('gameStart', 'making game...');
       lobby[gameID] = {players: [], gameType: player.newGame.gameType};
     }
-    lobby[gameID].players.push(player);
 
+    lobby[gameID].players.push(player);
     var gameType = lobby[gameID].gameType;
 
     if (lobby[gameID].players.length === gameSettings[gameType].max) {
