@@ -15,16 +15,17 @@ var lobby = {};
 var liveGames = {};
 
 var SwappingGame = function (players) {
-  var gameID = players[0].gameID;
+  io.emit('gameStart', 'in SwappingGame function');
+  // var gameID = players[0].gameID;
   //subscribe to new socket (should be on client side)
   // io.on('connection', function(socket){
   //   socket.join(gameID);
   // });
 
-  io.to(gameID).emit('newTarget', [players[0].playerId, players[1]]);
-  io.to(gameID).emit('newTarget', [players[1].playerId, players[0]]);
+  // io.to(gameID).emit('newTarget', [players[0].playerId, players[1]]);
+  // io.to(gameID).emit('newTarget', [players[1].playerId, players[0]]);
 
-  console.log('SwappingGame is running!!!');
+  // console.log('SwappingGame is running!!!');
 
   //listen for target acquired to end game
   //io.on('targetAcquired')  
@@ -64,7 +65,7 @@ io.on('connection', function(socket){
     // io.emit('gameStart', 'max in game: ' +gameSettings[gameType].max);
     if (lobby[gameID].players.length === gameSettings[gameType].max) {
       io.emit('gameStart', 'we are at max capacity!!');
-      liveGames[gameID] = new gameSettings[gameType].func(lobby[gameID].players);
+      liveGames[gameID] = new SwappingGame(lobby[gameID].players);
       delete lobby[gameID];
       io.emit('gameStart', 'lobby: ');
       io.emit('gameStart', lobby);
