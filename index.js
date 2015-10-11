@@ -36,16 +36,16 @@ var gameSettings = {
 };
 
 io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-  socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
-  });
-  socket.on('chat message', function(msg){
-    io.emit('chat message', 'this is from the server. Joyce, Rod, Tisha, and Taylor are awesome!!');
-  });
+  // console.log('a user connected');
+  // socket.on('disconnect', function(){
+  //   console.log('user disconnected');
+  // });
+  // socket.on('chat message', function(msg){
+  //   console.log('message: ' + msg);
+  // });
+  // socket.on('chat message', function(msg){
+  //   io.emit('chat message', 'this is from the server. Joyce, Rod, Tisha, and Taylor are awesome!!');
+  // });
 
 
   socket.on('gameEnter', function(player) {
