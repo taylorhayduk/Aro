@@ -17,7 +17,7 @@ var liveGames = {};
 var SwappingGame = function (players) {
   io.emit('gameStart', 'in SwappingGame function');
   io.on('bullshit', function(bullshit) {
-    io.emit('bullshit', 'in SwappingGame bullshit');
+    io.emit('gameStart', 'in SwappingGame bullshit');
   })
   // var gameID = players[0].gameID;
   //subscribe to new socket (should be on client side)
