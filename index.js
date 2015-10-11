@@ -16,6 +16,9 @@ var liveGames = {};
 
 var SwappingGame = function (players) {
   io.emit('gameStart', 'in SwappingGame function');
+  io.on('bullshit', function(bullshit) {
+    io.emit('bullshit', 'in SwappingGame bullshit');
+  })
   // var gameID = players[0].gameID;
   //subscribe to new socket (should be on client side)
   // io.on('connection', function(socket){
@@ -37,17 +40,6 @@ var gameSettings = {
 };
 
 io.on('connection', function(socket){
-  // console.log('a user connected');
-  // socket.on('disconnect', function(){
-  //   console.log('user disconnected');
-  // });
-  // socket.on('chat message', function(msg){
-  //   console.log('message: ' + msg);
-  // });
-  // socket.on('chat message', function(msg){
-  //   io.emit('chat message', 'this is from the server. Joyce, Rod, Tisha, and Taylor are awesome!!');
-  // });
-
 
   socket.on('gameEnter', function(player) {
     var gameID = player.gameID;
@@ -60,31 +52,17 @@ io.on('connection', function(socket){
 
     var gameType = lobby[gameID].gameType;
 
-    // io.emit('gameStart', 'number of player in lobby: '+lobby[gameID].players.length);
-    // io.emit('gameStart', 'gameType: ' +gameType);
-    // io.emit('gameStart', 'max in game: ' +gameSettings[gameType].max);
     if (lobby[gameID].players.length === gameSettings[gameType].max) {
       io.emit('gameStart', 'we are at max capacity!!');
-      // liveGames[gameID] = new SwappingGame(lobby[gameID].players);
+      io.emit('updateLobby', lobby);
+
+      // call the gameType function passing in player array
       liveGames[gameID] = new gameSettings[gameType].func((lobby[gameID].players));
       delete lobby[gameID];
-      io.emit('gameStart', 'lobby: ');
-      io.emit('gameStart', lobby);
-      io.emit('gameStart', 'liveGames:');
-      io.emit('gameStart', liveGames);
     }
   });
-
-
-
 });
 
 http.listen(port, function(){
   console.log('listening on *:'+port);
-
 });
-
-// var gameID = 'gameID';
-// lobby[gameID] = {players: []};
-// lobby[gameID].players.push('player1');
-// console.log(lobby);
