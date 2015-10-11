@@ -16,8 +16,10 @@ var liveGames = {};
 
 var SwappingGame = function (players) {
   io.emit('gameStart', 'in SwappingGame function');
-  io.on('bullshit', function(bullshit) {
-    io.emit('gameStart', 'in SwappingGame bullshit');
+  io.on('connection', function(socket) {
+    socket.on('bullshit', function(input){
+      io.emit('gameStart', 'heres some bullshit:' + input);
+    })
   })
   // var gameID = players[0].gameID;
   //subscribe to new socket (should be on client side)
@@ -53,9 +55,7 @@ io.on('connection', function(socket){
     var gameType = lobby[gameID].gameType;
 
     if (lobby[gameID].players.length === gameSettings[gameType].max) {
-      io.emit('gameStart', 'we are at max capacity!!');
       io.emit('updateLobby', lobby);
-
       // call the gameType function passing in player array
       liveGames[gameID] = new gameSettings[gameType].func((lobby[gameID].players));
       delete lobby[gameID];
