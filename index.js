@@ -21,9 +21,9 @@ var SwappingGame = function (players) {
 
   io.on('connection', function(socket) {
     socket.join(gameID);
-
     socket.on('def', function(input){
-      io.to(gameID).emit('in def server')
+      io.emit('in def server sending back globally');
+      io.to(gameID).emit('in def server sending back in room');
     })
   });
   //subscribe to new socket (should be on client side)
