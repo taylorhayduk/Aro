@@ -181,7 +181,7 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('HomeCtrl', function($rootScope, $scope, $state, socket, options) {
+.controller('HomeCtrl', function($rootScope, $scope, $state, $cordovaGeolocation, socket, options) {
 
   var codeOptions = options.codeOptions;
   var chars = codeOptions.chars;
@@ -193,6 +193,7 @@ angular.module('starter.controllers', [])
   $scope.gameInSession = false;
   $scope.now = new Date();
   setTimeout(function() { $scope.now = new Date(); }, 1000);
+  // $scope.gameTypeIndex = 1;
 
 
   $scope.selectCreate = function() {
@@ -234,8 +235,8 @@ angular.module('starter.controllers', [])
 
   $scope.joinGame = function (createNew, gameID) { //gameID only required for existing
     if (createNew) {
-      var gameID = '';
-      for (var j = 0; j < codeOptions[private?'privateLen':'publicLen']; j++) {
+      gameID = '';
+      for (var j = 0; j < codeOptions[$scope.createdGame.isPrivate?'privateLen':'publicLen']; j++) {
         gameID += chars[Math.floor(Math.random()*chars.length)];
       }
       // for now, does not check if this game code already exists
@@ -247,7 +248,6 @@ angular.module('starter.controllers', [])
       // has that gameID, then:
         // $scope.game.notExist = true;
       // if receive success, change back to false
-
     $cordovaGeolocation.getCurrentPosition({timeout: 10000, enableHighAccuracy: true})
     .then(function(currentPosition) {
       $scope.location = {
@@ -264,7 +264,7 @@ angular.module('starter.controllers', [])
       if (createNew) {
         $scope.playerObj.newGame = {
           isPrivate: $scope.createdGame.isPrivate,
-          gameType: options.gameTypes[$scope.gameTypeIndex].name
+          gameType: options.gameTypes[$scope.createdGame.gameTypeIndex].name
         }
       }
       socket.emit('gameEnter', $scope.playerObj);

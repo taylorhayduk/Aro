@@ -6,7 +6,7 @@
         <input type="submit" ng-click="playerName = enterName">
       </div>
 
-      <div ng-if="playerName">
+      <div ng-if="playerName" ng-hide="hasJoinedGame">
         <div>
           <input ng-hide="selectedCreate" class="home-button" type="submit" value="Create a new game" on-tap="selectCreate()"/>
           <input ng-hide="selectedJoin" class="home-button" type="submit" value="Join an existing game" on-tap="selectJoin()"/>
@@ -15,13 +15,15 @@
         <div ng-if="selectedCreate">
 
           <div>Select whether the game will be public or private</div>
-          <select ng-init="false" ng-model="createdGame.isPrivate">
+          <select ng-init="createdGame.isPrivate=false" ng-model="createdGame.isPrivate">
             <option value="false" selected>Public</option>
             <option value="true">Private</option>
           </select>
           <!-- Maybe add option later to specify max distance between players -->
           <div>Select game</div>
-          <select ng-init="0" ng-model="createdGame.gameTypeIndex">
+          <!-- <select ng-init="createdGame.gameTypeIndex=0" name="selectGameType" ng-model="createdGame.gameTypeIndex" ng-options="i as gameType.name for (i, gameType) in gameTypes">
+          </select> -->
+          <select ng-init="createdGame.gameTypeIndex=0" name="selectGameType" ng-model="createdGame.gameTypeIndex">
             <option ng-repeat="gameType in gameTypes" value="{{ $index }}" ng-selected="$first">{{ gameType.name }}</option>
           </select>
 
