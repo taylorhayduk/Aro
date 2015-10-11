@@ -181,7 +181,7 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('HomeCtrl', function($rootScope, $scope, socket, options) {
+.controller('HomeCtrl', function($rootScope, $scope, $state, socket, options) {
 
   var codeOptions = options.codeOptions;
   var chars = codeOptions.chars;
@@ -190,8 +190,10 @@ angular.module('starter.controllers', [])
   $scope.publicGames = [];
   $scope.createdGame = {};
   $scope.game = {};
+  $scope.gameInSession = false;
   $scope.now = new Date();
   setTimeout(function() { $scope.now = new Date(); }, 1000);
+
 
   $scope.selectCreate = function() {
     $scope.selectedJoin = false;
@@ -228,21 +230,65 @@ angular.module('starter.controllers', [])
     sendNewGametoServer($scope.createdGame.isPrivate);
   };
 
-  $scope.joinGame = function(gameID) {
+  $scope.promptName = function(){};
+
+  $scope.joinGame = function (createNew, gameID) { //gameID only required for existing
+    if (createNew) {
+      var gameID = '';
+      for (var j = 0; j < codeOptions[private?'privateLen':'publicLen']; j++) {
+        gameID += chars[Math.floor(Math.random()*chars.length)];
+      }
+      // for now, does not check if this game code already exists
+      // can add that in future
+    }
     // trigger a joinGame to server
       // if receive error from server
       // because no current available game
       // has that gameID, then:
         // $scope.game.notExist = true;
       // if receive success, change back to false
+
+    $cordovaGeolocation.getCurrentPosition({timeout: 10000, enableHighAccuracy: true})
+    .then(function(currentPosition) {
+      $scope.location = {
+        latitude: currentPosition.coords.latitude,
+        longitude: currentPosition.coords.longitude
+      };
+
+      $scope.playerObj = {
+        location: $scope.location,
+        playerName: $scope.playerName,
+        gameID: gameID
+      };
+
+      if (createNew) {
+        $scope.playerObj.newGame = {
+          isPrivate: $scope.createdGame.isPrivate,
+          gameType: options.gameTypes[$scope.gameTypeIndex].name
+        }
+      }
+      socket.emit('gameEnter', $scope.playerObj);
+      // for now, set to async, but if we change to having any checks
+      // on whether gameID exists, then will need to move into callback
+      // function for socket.
+      $scope.hasJoinedGame = true;
+      $state.go('tab.compass');
+      // switch tabs to game tab
+    });
+
+      //assume $scope variables are provided:
+      // $scope.location
+      // $scope.playerName
+      // $scope.isPrivate
+      // $scope.newGame
   };
 
-  socket.on('gameEnter', function() {
-    // show waiting screen
-  });
+  $scope.endGame = function() {
+    $scope.hasJoinedGame = false;
+    // here, must communicate to server so server can take that
+    // player out from the players list for that game
+    // (and can notify a player if they are the only one remaining)
 
-  socket.on('game start', function() {
-
-  });
+  };
 
 });
