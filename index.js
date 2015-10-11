@@ -65,7 +65,8 @@ io.on('connection', function(socket){
     // io.emit('gameStart', 'max in game: ' +gameSettings[gameType].max);
     if (lobby[gameID].players.length === gameSettings[gameType].max) {
       io.emit('gameStart', 'we are at max capacity!!');
-      liveGames[gameID] = new SwappingGame(lobby[gameID].players);
+      // liveGames[gameID] = new SwappingGame(lobby[gameID].players);
+      liveGames[gameID] = new gameSettings[gameType].func((lobby[gameID].players));
       delete lobby[gameID];
       io.emit('gameStart', 'lobby: ');
       io.emit('gameStart', lobby);
